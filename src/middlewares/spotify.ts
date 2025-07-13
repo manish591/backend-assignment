@@ -5,16 +5,18 @@ const SPOTIFY_CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET!;
 
 export async function spotifyAuthMiddleware(req: Request, res: Response, next: NextFunction) {
   try {
-    const res = await fetch(`https://accounts.spotify.com/api/token?grant_type=client_credentials&client_id=${SPOTIFY_CLIENT_ID}&client_secret=${SPOTIFY_CLIENT_SECRET}`, {
+    const result = await fetch(`https://accounts.spotify.com/api/token?grant_type=client_credentials&client_id=${SPOTIFY_CLIENT_ID}&client_secret=${SPOTIFY_CLIENT_SECRET}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"
       }
     });
 
-    const data = await res.json();
+    const data = await result.json();
 
-    if (res.status === 200) {
+    console.log("the accesstoken", data);
+
+    if (result.status === 200) {
       req.spotifyToken = data.access_token;
       next();
     }
